@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donation Page</title>
+  <!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fbff;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #007bff, #00b894);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 10px auto 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    /* About Us */
+    .about {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .about h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #007bff;
+    }
+/* Fullscreen Carousel */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Each Slide */
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* Images */
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* fills screen (cuts little) */
+}
+
+/* Captions */
+.caption {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  background: rgba(0,0,0,0.5);
+  padding: 20px 30px;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.caption h1 {
+  font-size: 2.5rem;
+  color: #ffdd59;
+}
+
+/* Achievements Section */
+.achievements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 40px 0;
+  padding: 0 20px;
+}
+
+.achievements .card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+ box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  transition: transform 0.3s;
+  text-align: center;
+}
+
+.achievements .card:hover {
+  transform: translateY(-10px);
+}
+
+.achievements h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.achievements p {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+
+    /* Donation Types */
+    .donation-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+
+    .donation-card {
+      background: white;
+      border-radius: 15px;
+     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; 
+     
+      overflow: hidden;
+      transition: transform 0.3s;
+      cursor: pointer;+
+    }
+
+    .donation-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .donation-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .donation-card .content {
+      padding: 15px;
+    }
+
+    .donation-card h3 {
+      margin: 0 0 10px;
+      color: #00b894;
+    }
+
+    /* Donation Form */
+    .donation-form {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      
+      max-width: 600px;
+      margin: 0 auto 50px;
+    }
+
+    .donation-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #007bff;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+      height: 60px;
+    }
+
+    .payment-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .payment-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    .payment-btn:hover {
+      background: #0056b3;
+    }
+
+    .qr-section {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .qr-section img {
+      width: 200px;
+      border: 5px solid #ddd;
+      border-radius: 10px;
+    }
+
+    button[type="submit"] {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #28a745;
+      color: white;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background: #218838;
+    }
+
+    /* Footer Base */
+.footer {
+  background: #111;
+  color: #eee;
+  font-family: Arial, sans-serif;
+  padding: 60px 20px 20px;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-item h4 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #fff;
+  border-bottom: 2px solid #ff9800;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.footer-item p,
+.footer-item a {
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.6;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+
+.footer-item a:hover {
+  color: #ff9800;
+  transform: translateX(5px);
+}
+
+/* Newsletter */
+.newsletter {
+  display: flex;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 30px;
+  border: 1px solid #444;
+}
+.newsletter input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+.newsletter button {
+  background: #ff9800;
+  border: none;
+  color: #fff;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.newsletter button:hover {
+  background: #e68900;
+}
+
+/* Social Icons */
+.socials {
+  margin-top: 15px;
+}
+.socials a {
+  display: inline-block;
+  margin-right: 10px;
+  color: #fff;
+  font-size: 16px;
+  background: #222;
+  padding: 10px;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.socials a:hover {
+  background: #ff9800;
+  color: #111;
+  transform: scale(1.1);
+}
+
+/* Posts */
+.post {
+  margin-bottom: 15px;
+}
+.post .tag {
+  font-size: 12px;
+  color: #ff9800;
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.btn-view {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #ff9800;
+  color: #ff9800;
+  font-size: 13px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.btn-view:hover {
+  background: hsl(0, 0%, 5%);
+  color: #111;
+}
+
+
+
+
+/* Footer Bottom */
+.footer-bottom {
+  border-top: 1px solid #333;
+  text-align: center;
+  padding-top: 15px;
+  margin-top: 30px;
+  font-size: 13px;
+  color: #888;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .newsletter {
+    flex-direction: column;
+    border-radius: 10px;
+  }
+  .newsletter input {
+    border-radius: 10px 10px 0 0;
+  }
+  .newsletter button {
+    border-radius: 0 0 10px 10px;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌍 Help Us Make a Difference</h1>
+    <p>Together we can bring smiles to those in need. Support our causes with your kind donations.</p>
+  </header>
+
+  <div class="container">
+
+    <!-- About Us -->
+    <section class="about">
+      <h2>About Us</h2>
+      <p>We are a non-profit organization working towards education, food distribution, medical support, and spiritual growth.  
+         Every rupee you donate goes directly into helping lives. Join us in this mission to create a better tomorrow.</p>
+
+    <!-- Fullscreen Slider -->
+<div class="carousel">
+  <div class="slide active">
+    <img src="https://redcarehmo.com/wp-content/uploads/2018/03/reading-2.jpg" alt="Helping Children">
+    <div class="caption">
+      <h1>📚 Helping Children</h1>
+      <p>Providing education & school support to underprivileged kids.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <img src="https://avatars.mds.yandex.net/i?id=204e8a34230b84864482ae9e1327c817_l-10610468-images-thumbs&ref=rim&n=13&w=2560&h=1588" alt="Food Donation">
+    <div class="caption">
+      <h1>🍲 Food Donation</h1>
+      <p>Nutritious meals served to needy families every month.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <img src="https://dmch.edu/uploads/flash_images/neurosurgeryward-7.jpg" alt="Medical Support">
+    <div class="caption">
+      <h1>💊 Medical Support</h1>
+      <p>Free health checkups & medicine camps for poor communities.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <img src="https://lanka.ru/wp-content/uploads/DSC_2072.jpg" alt="Helping Families">
+    <div class="caption">
+      <h1>🙏 Helping Families</h1>
+      <p>Supporting families with essentials & temple activities.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- Achievements -->
+<div class="achievements">
+  <div class="card">
+    <h3>📚 500+ Kids Educated</h3>
+    <p>We have distributed books and sponsored school fees for underprivileged children.</p>
+  </div>
+  <div class="card">
+    <h3>🍲 2000+ Meals Served</h3>
+    <p>Nutritious meals served to families and homeless people every month.</p>
+  </div>
+  <div class="card">
+    <h3>💊 15+ Medical Camps</h3>
+    <p>Free health checkups and medicines distributed to needy people.</p>
+  </div>
+  <div class="card">
+    <h3>🙏 Temple Support</h3>
+    <p>Helping in temple rituals, maintenance, and spiritual growth programs.</p>
+  </div>
+</div>
+
+
+    <!-- Donation Types -->
+    <section>
+      <h2 style="text-align:center; color:#007bff;">Choose a Cause</h2>
+      <div class="donation-types">
+        <div class="donation-card">
+          <img src="https://www.bnr.rw/images/Green-Finance-Awareness.jpg" alt="Education">
+          <div class="content">
+            <h3>Education Fund</h3>
+            <p>Support underprivileged children to get quality education and resources.</p>
+          </div>
+        </div>
+        <div class="donation-card">
+          <img src="https://www.thesun.co.uk/wp-content/uploads/2023/04/d7a242-volunteers-collecting-food-donations-808672629.jpg" alt="Food">
+          <div class="content">
+            <h3>Food Help</h3>
+            <p>Help us serve nutritious meals to families and homeless people.</p>
+          </div>
+        </div>
+        <div class="donation-card">
+          <img src="https://cdn.sanity.io/images/0vv8moc6/dvm360/70f39d3eda126ce4b2ce96cf89fac1b6be22b5b3-4992x3328.jpg" alt="Medical">
+          <div class="content">
+            <h3>Medical Support</h3>
+            <p>Provide medical aid, medicines, and emergency help to those in need.</p>
+          </div>
+        </div>
+        <div class="donation-card">
+          <img src="https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BB1rpZeL.img?w=1200&h=675&m=4&q=91" alt="Temple">
+          <div class="content">
+            <h3>Temple Donation</h3>
+            <p>Contribute towards temple maintenance, rituals, and spiritual programs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Donation Form -->
+    <section class="donation-form">
+      <h2>Make a Donation ❤️</h2>
+      <form id="donationForm">
+        <label>Your Name</label>
+        <input type="text" id="donorName" required>
+
+        <label>Email</label>
+        <input type="email" id="donorEmail" required>
+
+        <label>Phone</label>
+        <input type="tel" id="donorPhone" required>
+
+        <label>Donation Type</label>
+        <select id="donationType" required>
+          <option value="">-- Select Type --</option>
+          <option value="education">Education Fund</option>
+          <option value="food">Food Help</option>
+          <option value="medical">Medical Support</option>
+          <option value="temple">Temple Donation</option>
+        </select>
+
+        <label>Message</label>
+        <textarea id="donationMsg" placeholder="Write something..."></textarea>
+
+        <label>Amount (₹)</label>
+        <input type="number" id="amount" placeholder="Enter amount" required>
+
+        <!-- Payment Options -->
+        <label>Choose Payment Method</label>
+        <div class="payment-options">
+          <button type="button" class="payment-btn" onclick="showQR('upi')">UPI</button>
+          <button type="button" class="payment-btn" onclick="showQR('paytm')">Paytm</button>
+          <button type="button" class="payment-btn" onclick="showQR('netbanking')">NetBank</button>
+        </div>
+
+        <!-- QR Section -->
+        <div class="qr-section" id="qrSection">
+          <p>📷 Scan & Pay using your App</p>
+          <img id="qrImage" src="" alt="QR Code">
+        </div>
+
+        <button type="submit">Confirm Donation</button>
+      </form>
+    </section>
+  </div>
+
+  <footer>
+   <footer class="footer">
+  <div class="footer-container">
+
+    <!-- Newsletter -->
+    <div class="footer-item">
+      <h4>Newsletter</h4>
+      <p>Stay updated with our latest donations, events, and community projects.</p>
+      <div class="newsletter">
+        <input type="email" placeholder="Enter your email">
+        <button>Sign Up</button>
+      </div>
+    </div>
+
+    <!-- Explore -->
+    <div class="footer-item">
+      <h4>Explore</h4>
+      <a href="#">🏠 Home</a>
+      <a href="#">✨ Services</a>
+      <a href="#">ℹ️ About Us</a>
+      <a href="#">📂 Projects</a>
+      <a href="#">💬 Testimonials</a>
+      <a href="#">👨‍👩‍👦 Our Team</a>
+      <a href="#">📞 Contact Us</a>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="footer-item">
+      <h4>Contact Info</h4>
+      <p>📍 2nd Floor, B, 36, near Ram Ram Bank Chauraha, Sector O, Aliganj, Lucknow, Uttar Pradesh 226021</p>
+      <p>📧 info@e.com</p>
+      <p>📞  091984 83820</p>
+      <div class="socials">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+
+    <!-- Popular Posts -->
+    <div class="footer-item">
+      <h4>Popular Posts</h4>
+      <div class="post">
+        <span class="tag">Investment</span>
+        <a href="#">Revisiting Your Investment & Distribution Goals</a>
+      </div>
+      <div class="post">
+        <span class="tag">Business</span>
+        <a href="#">Fund Advisors Interview with Director</a>
+      </div>
+      <a href="#" class="btn-view">View All Posts →</a>
+    </div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="footer-bottom">
+    <p>© 2025 DigiCoder Ngo | All Rights Reserved</p>
+  </div>
+
+
+  </footer>
+
+  <script>
+    function showQR(method) {
+      const amount = document.getElementById("amount").value || 100;
+      const qrSection = document.getElementById("qrSection");
+      const qrImage = document.getElementById("qrImage");
+
+      if (method === "upi") {
+        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=your-upi-id@upi&pn=Donation&am=${amount}`;
+      } else if (method === "paytm") {
+        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=paytm://pay?pa=your-paytm-id&am=${amount}`;
+      } else {
+        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://yourbanklink.com?amount=${amount}`;
+      }
+
+      qrSection.style.display = "block";
+    }
+
+    document.getElementById("donationForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("donorName").value;
+      const type = document.getElementById("donationType").value;
+      const amount = document.getElementById("amount").value;
+      alert(`✅ Thank you ${name}! You donated ₹${amount} for ${type}.`);
+    });
+
+    let slides = document.querySelectorAll(".slide");
+let index = 0;
+
+function showSlide() {
+  slides.forEach((slide, i) => {
+    slide.classList.remove("active");
+  });
+  slides[index].classList.add("active");
+  index = (index + 1) % slides.length; // loop
+}
+
+setInterval(showSlide, 4000);
+  </script>
+</body>
+</html>
+
